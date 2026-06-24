@@ -1,2 +1,18 @@
 # MCUnityContinued
 A continuation of IronArthur's MCUnity 
+
+This is an attempt to get Mech Commander working in Unity based on the masterful work of Iron Arthur!
+He basically wrote most of what was needed to get all the art assets from Mech Commander and that code still lies at the heart of this project.
+
+What we can do now?
+1. Load all assets from the game into Unity
+2. Maps can be read from their respective FST and FIT files and full maps can be loaded as they appear in the game
+3. Mechs and Vehicles can be loaded into Unity at least to view
+
+What we hope to get done
+1. A working port of Mech Commander in Unity
+2. A working editor for the original game in Unity
+
+Challenges
+1. To get Mech Commander ported, we need to be able to recreate the systems in game
+2. To get the editor working, we need to be able to decode the GMM file which was the last binary not decoded by IronArthur
