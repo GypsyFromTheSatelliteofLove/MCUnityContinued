@@ -1,0 +1,180 @@
+{
+    "pathsToMCBitmap": [
+        "Assets/Resources/Sprites/Mechs\\0_AWESOME\\TORSOS_0.bytes"
+    ],
+    "animationStates": [
+        {
+            "stateName": "SHUT_DOWN",
+            "startIndex": 17,
+            "numOfFaces": 17,
+            "numOfImages": 16,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "BEGIN_WALK",
+            "startIndex": 306,
+            "numOfFaces": 17,
+            "numOfImages": 10,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "WALK",
+            "startIndex": 476,
+            "numOfFaces": 17,
+            "numOfImages": 26,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "STOP_WALK",
+            "startIndex": 918,
+            "numOfFaces": 17,
+            "numOfImages": 14,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "BEGIN_RUN",
+            "startIndex": 1156,
+            "numOfFaces": 17,
+            "numOfImages": 13,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "RUN",
+            "startIndex": 1377,
+            "numOfFaces": 17,
+            "numOfImages": 18,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "RUN_TO_WALK",
+            "startIndex": 1683,
+            "numOfFaces": 17,
+            "numOfImages": 13,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "HOBBLE",
+            "startIndex": 1904,
+            "numOfFaces": 17,
+            "numOfImages": 29,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_BACKWARDS_0",
+            "startIndex": 2397,
+            "numOfFaces": 5,
+            "numOfImages": 28,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_FORWARDS_0",
+            "startIndex": 2537,
+            "numOfFaces": 5,
+            "numOfImages": 29,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_BACKWARDS_1",
+            "startIndex": 2682,
+            "numOfFaces": 5,
+            "numOfImages": 28,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_FORWARDS_1",
+            "startIndex": 2822,
+            "numOfFaces": 5,
+            "numOfImages": 29,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_BACKWARDS_2",
+            "startIndex": 2967,
+            "numOfFaces": 5,
+            "numOfImages": 28,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "FALL_FORWARDS_2",
+            "startIndex": 3107,
+            "numOfFaces": 5,
+            "numOfImages": 26,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "JUMP",
+            "startIndex": 3237,
+            "numOfFaces": 17,
+            "numOfImages": 55,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "ROLL_OVER",
+            "startIndex": 4172,
+            "numOfFaces": 5,
+            "numOfImages": 42,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "GET_UP",
+            "startIndex": 4382,
+            "numOfFaces": 5,
+            "numOfImages": 43,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        }
+    ],
+    "singleFrameAnimationStates": [
+        {
+            "stateName": "SHUTDOWN_IDLE",
+            "startIndex": 0,
+            "numOfFaces": 17,
+            "numOfImages": 1,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        },
+        {
+            "stateName": "IDLE",
+            "startIndex": 289,
+            "numOfFaces": 17,
+            "numOfImages": 1,
+            "offset": 0,
+            "tick": 1,
+            "playspeed": 1
+        }
+    ]
+}
