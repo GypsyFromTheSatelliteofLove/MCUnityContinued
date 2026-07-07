@@ -50,3 +50,5 @@ SOME INFO:
 1. The main thing the game could do to load the assets is to use a custom texture + indexing system which works (kind of) but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)
 2. IF the loading problem can be solved (which might be because the indexing uses big arrays of vector2s), its probably better to generate meshes instead of sprite sheets?
 3. The current version is still basically more OOP but a DOD approach should be possible... but the structs have to be streamlined for better memory effeciency
+4. Author is aware the code is bad! Mostly hacked together during whatever free time was had :/
+5. Author is also aware coding is not his strongest suite hehe so any words of advice will be appreciated
