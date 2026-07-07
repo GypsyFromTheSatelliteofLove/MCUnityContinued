@@ -1,5 +1,6 @@
 # MCUnityContinued
 A continuation of IronArthur's MCUnity 
+https://github.com/IronArthur/MCUnity
 
 This is an attempt to get Mech Commander working in Unity based on the masterful work of Iron Arthur!
 He basically wrote most of what was needed to get all the art assets from Mech Commander and that code still lies at the heart of this project.
