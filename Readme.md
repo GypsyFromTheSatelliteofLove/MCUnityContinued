@@ -9,8 +9,15 @@ Quick Tutorial:
 1. Download the files in the repo as a zip or git clone it.
 2. Open the SpriteLoader scene
 3. Find the GameFilesLoader gameobject and locate your MCG installation folder (where the MCG.exe is)
-4. Press Copy Files to make a local copy of the asset files
-5. You can load maps with the map loader
+
+<img width="662" height="649" alt="image" src="https://github.com/user-attachments/assets/d36622cd-b389-4905-8c12-e2a704a9b781" />
+
+   
+5. Press Copy Files to make a local copy of the asset files
+6. You can load maps with the map loader
+
+<img width="1880" height="893" alt="image" src="https://github.com/user-attachments/assets/8e8e6a9c-eecd-4d54-a0d1-f6fd794c23ef" />
+
 6. Press play and the mechsample can be moved with the arrow keys (in all its buggy buggy glory!)
 
 What we can do now?
