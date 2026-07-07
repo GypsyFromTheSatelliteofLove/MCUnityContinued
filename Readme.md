@@ -20,6 +20,9 @@ Quick Tutorial:
 
 6. Press play and the mechsample can be moved with the arrow keys (in all its buggy buggy glory!)
 
+<img width="1619" height="855" alt="image" src="https://github.com/user-attachments/assets/76b37846-701e-492c-aed2-0223145654db" />
+
+
 What we can do now?
 
 1. Load all assets from the game into Unity
@@ -40,7 +43,7 @@ Challenges
 Known Issues:
 
 1. The map overlay tiles are misplaced. The positioning is not yet figured out.
-2. The Mech animations will have problems when mirroring (among other things like wrong animation transitions etc)
+2. The Mech animations will have problems when mirroring (among other things like wrong animation transitions etc) 
 3. Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!
 
 OLD STUFF:
@@ -52,6 +55,9 @@ OLD STUFF:
 6. then click the sprite editor and just auto slice with the pivot at TOP LEFT... do this for all the sprite sheets (THESE WILL TAKE A LOT OF TIME: up to 10 min for each sheet?)
 7. Locate the MechSample gameobject and click the Load Resources button on the MechAnimator_OLD mono
 8. Press play and watch the jank filled monstrosity fill your eyeballs
+   
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/34018acc-9694-487c-b634-4540d891973f" />
+
 
 SOME INFO:
 1. The main thing the game could do to load the assets is to use a custom texture + indexing system which works (kind of) but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)
