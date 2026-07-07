@@ -392,25 +392,6 @@ public class MechAnimator : MonoBehaviour
 
     public void ChangeFacing()
 	{
-        if (animationState < MechAnimationState.IDLE && l_armAnimator.CurrentFacingCount != 32)
-		{
-            torsoAnimator.AdjustZDepth(-.01f);
-            l_armAnimator.AdjustZDepth(0);
-            r_armAnimator.AdjustZDepth(-0.02f);
-        }
-
-		else if (facing > Facing.S && facing < Facing.N)
-		{
-            torsoAnimator.AdjustZDepth(-.01f);
-            l_armAnimator.AdjustZDepth(0);
-            r_armAnimator.AdjustZDepth(-0.02f);
-        }
-        else if (facing > Facing.N && facing <= Facing.SW_S_3)
-        {
-            torsoAnimator.AdjustZDepth(-.01f);
-            l_armAnimator.AdjustZDepth(-0.02f);
-            r_armAnimator.AdjustZDepth(0);
-        }
 
         legsAnimator.UpdateFacingRounded((int)facing);
         legsAnimator.UpdateAnimator();
@@ -423,6 +404,26 @@ public class MechAnimator : MonoBehaviour
 
         r_armAnimator.UpdateFacingRounded((int)facing);
         r_armAnimator.UpdateAnimator();
+
+        if (animationState < MechAnimationState.IDLE && l_armAnimator.CurrentFacingCount != 32)
+        {
+            torsoAnimator.AdjustZDepth(-.01f);
+            l_armAnimator.AdjustZDepth(0);
+            r_armAnimator.AdjustZDepth(-0.02f);
+        }
+
+        else if (facing > Facing.S && facing < Facing.N)
+        {
+            torsoAnimator.AdjustZDepth(-.01f);
+            l_armAnimator.AdjustZDepth(0);
+            r_armAnimator.AdjustZDepth(-0.02f);
+        }
+        else if (facing > Facing.N && facing <= Facing.SW_S_3)
+        {
+            torsoAnimator.AdjustZDepth(-.01f);
+            l_armAnimator.AdjustZDepth(-0.02f);
+            r_armAnimator.AdjustZDepth(0);
+        }
     }
 
     public void StartTransition()

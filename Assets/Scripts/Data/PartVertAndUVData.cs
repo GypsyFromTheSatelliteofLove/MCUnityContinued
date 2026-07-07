@@ -11,7 +11,7 @@ public struct PartVertAndUVData
 	// we have to remember that arrays are reference types so they might not be laid out in memory like we assume they would be
 	public Vector2 vert_0; //8
 	public Vector2 vert_1; //8
-	public Vector2 vert_2; //8
+	public Vector2 vert_2; //8 // WE COULD TECHNICALLY ONLY STORE 2 CORNERS - LATER
 	public Vector2 vert_3; //8 = 32 bytes total
 	public Vector2 uv_0; //8
 	public Vector2 uv_1; //8

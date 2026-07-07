@@ -40,6 +40,8 @@ public class MechSpriteLoader_OLD : MonoBehaviour
     public PartIndex currentPartIndex;
     public int tileSizeX;
     public int tileSizeY;
+    public int paddingX;
+    public int paddingY;
     public int targetAtlasSize = 4096;
 
     public bool generateIndexTextFiles = false;
@@ -72,8 +74,9 @@ public class MechSpriteLoader_OLD : MonoBehaviour
     };
 
     public string pathToResourceFolder = "Assets/Resources/Sprites/Mechs";
-    private const string spriteDataFileExt = "_spriteData.Json";
-    private const string spriteInfosFileExt = "_spriteInfos.Json";
+    private const string spriteDataFileExt = "_spriteDataOLD.Json";
+    private const string spriteInfosFileExt = "_spriteInfosOLD.Json";
+    private const string spriteBMPFileExt = "_OLD.bytes";
     private List<string> pathsToSpriteSheets = new List<string>();
 
     private const float pixelsPerUnit = 1f / 100f;
@@ -334,8 +337,8 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         //Debug.Log("total number of valid files " + bitmaps.Count);
         int tileMaxY = tileSizeY;
         int tileMaxX = tileSizeX;
-        int yEndPadding = 0;
-        int xEndPadding = 0;
+        int yEndPadding = paddingY;
+        int xEndPadding = paddingX;
         int atlasMaxX = targetAtlasSize / (tileMaxX + xEndPadding);
         int atlasMaxY = targetAtlasSize / (tileMaxY + yEndPadding);
 
@@ -404,8 +407,8 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         //Debug.Log("total number of valid files " + bitmaps.Count);
         int tileMaxY = 0;
         //int tileMaxX = tileSizeX;
-        int yEndPadding = 0;
-        int xEndPadding = 0;
+        int yEndPadding = paddingY;
+        int xEndPadding = paddingX;
         //int atlasMaxX = targetAtlasSize / (tileMaxX + xEndPadding);
         //int atlasMaxY = targetAtlasSize / (tileMaxY + yEndPadding);
 
@@ -492,6 +495,7 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         currentPartIndex = PartIndex.L_ARMS;
     }
 
+    // lets print the sheet in a folder
     public void PrintAllPartTexturesFromCache()
 	{
         MechSHPIndexTable origMechIndex = mechIndex;
@@ -501,18 +505,20 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         while (mechIndex <= MechSHPIndexTable.BUSHWACKER)
         {
             sheetCount = 0;
-            string folder = Path.Combine(pathToResourceFolder, GetFolderPathOfMech());
-            var tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + ".bytes"));
+            string folder = Path.Combine(pathToResourceFolder, GetFolderPathOfMechAndPart());
+            string outputFolder = Path.Combine(pathToResourceFolder, GetFolderPathOfMechAndPart());
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(outputFolder);
+            var tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + spriteBMPFileExt));
 
             while (tempText != null)
             {
                 byte[] imageBytes = tempText.EncodeToPNG();
                 DestroyImmediate(tempText);
 
-                var path = Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount++ + ".png");
-                File.WriteAllBytes(path, imageBytes);
-                Debug.Log("printing to " + path);
-                tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + ".bytes"));
+                var outputPath = Path.Combine(outputFolder, currentPartIndex.ToString() + "_" + sheetCount++ + ".png");
+                File.WriteAllBytes(outputPath, imageBytes);
+                Debug.Log("printing to " + outputPath);
+                tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + spriteBMPFileExt));
             }
 
             mechIndex++;
@@ -520,6 +526,7 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         mechIndex = origMechIndex;
     }
 
+    // lets print this for sprite sheet creation - it will make folders for the sheets so the old part animator can get them easier
     public void PrintTextureFromCurrentMechCache()
 	{
         currentPartIndex = PartIndex.L_ARMS;
@@ -528,17 +535,19 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         {
             sheetCount = 0;
             string folder = Path.Combine(pathToResourceFolder, GetFolderPathOfMech());
-            var tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + ".bytes"));
+            string outputFolder = Path.Combine(pathToResourceFolder, GetFolderPathOfMechAndPart());
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(outputFolder);
+            var tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + spriteBMPFileExt));
 
             while (tempText != null)
             {
                 byte[] imageBytes = tempText.EncodeToPNG();
                 DestroyImmediate(tempText);
 
-                var path = Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount++ + ".png");
-                File.WriteAllBytes(path, imageBytes);
-                Debug.Log("printing to " + path);
-                tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + ".bytes"));
+                var outputPath = Path.Combine(outputFolder, currentPartIndex.ToString() + "_" + sheetCount++ + ".png");
+                File.WriteAllBytes(outputPath, imageBytes);
+                Debug.Log("printing to " + outputPath);
+                tempText = LoadTextureFromCache(Path.Combine(folder, currentPartIndex.ToString() + "_" + sheetCount + spriteBMPFileExt));
             }
             currentPartIndex++;
         }
@@ -827,6 +836,29 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         return new SpriteAnimationStatesSaveData();
     }
 
+    public void CacheDataForMech()
+	{
+        SetupFileManager();
+        currentPartIndex = PartIndex.L_ARMS;
+        GetValidIndices(validLarmsIndices, pakFilesToCopy[(int)currentPartIndex]);
+        CacheFixedSpacingMCBitmap(0, 0);
+        
+        currentPartIndex = PartIndex.LEGS;
+        GetValidIndices(validLegsIndices, pakFilesToCopy[(int)currentPartIndex]);
+        CacheFixedSpacingMCBitmap(0, 0);
+
+        currentPartIndex = PartIndex.R_ARMS;
+        GetValidIndices(validRarmsIndices, pakFilesToCopy[(int)currentPartIndex]);
+        CacheFixedSpacingMCBitmap(0, 0);
+
+        currentPartIndex = PartIndex.TORSOS;
+        GetValidIndices(validTorsoIndices, pakFilesToCopy[(int)currentPartIndex]);
+        CacheFixedSpacingMCBitmap(0, 0);
+
+        currentPartIndex = PartIndex.L_ARMS;
+        
+    }
+
     public void CacheData()
 	{
         //pathsToSpriteSheets.Clear();
@@ -884,8 +916,8 @@ public class MechSpriteLoader_OLD : MonoBehaviour
 	{
         MCBitmap outputBitmap;
         int tileMaxY = 0;
-        int yEndPadding = 0;
-        int xEndPadding = 0;
+        int yEndPadding = paddingY;
+        int xEndPadding = paddingX;
 
         outputBitmap = new MCBitmap(targetAtlasSize, targetAtlasSize);
 
@@ -894,7 +926,7 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         int outputX = 0, outputY = 0, currentRgbIndex, currentBitMapIndex;
 
         string path = Path.Combine(pathToResourceFolder, GetFolderPathOfMech());
-        string pathBytes = Path.Combine(path, currentPartIndex.ToString() + "_" + count + ".bytes"); // we will store this for the save
+        string pathBytes = Path.Combine(path, currentPartIndex.ToString() + "_" + count + spriteBMPFileExt); // we will store this for the save
         string pathData = Path.Combine(path, currentPartIndex.ToString() + "_" + count + spriteDataFileExt);
         string pathSpriteInfos = Path.Combine(path, currentPartIndex.ToString() + "_" + count + spriteInfosFileExt);
         var saveData = new SpriteAnimationStatesSaveData();
@@ -981,6 +1013,82 @@ public class MechSpriteLoader_OLD : MonoBehaviour
         spriteInfoSaveData.spriteInfos = spriteInfos.ToArray();
         File.WriteAllText(pathData, JsonUtility.ToJson(saveData, true));
         File.WriteAllText(pathSpriteInfos, JsonUtility.ToJson(spriteInfoSaveData, true));
+    }
+
+    private void CacheFixedSpacingMCBitmap(int startIndex, int count)
+	{
+        MCBitmap outputBitmap;
+        int tileMaxY = tileSizeY;
+        int tileMaxX = tileSizeX;
+        int yEndPadding = paddingY;
+        int xEndPadding = paddingX;
+        //int atlasMaxX = targetAtlasSize / (tileMaxX + xEndPadding);
+        //int atlasMaxY = targetAtlasSize / (tileMaxY + yEndPadding);
+
+        // just make atlas size maybe??
+        outputBitmap = new MCBitmap(targetAtlasSize, targetAtlasSize);
+
+        int bytes = outputBitmap.Stride * outputBitmap.Height;
+
+        Debug.Log("will print " + targetAtlasSize + " size with maxWidth " + tileMaxX + " x max Height " + tileMaxY + " with fmt width " + outputBitmap.FormatWidth);
+        Debug.Log("bmp stride = " + outputBitmap.Stride + " x " + outputBitmap.Height);
+        var rgbValues = new byte[bytes];
+        //Debug.Log("number of bytes in sheet " + bytes);
+        // it does start at top??
+        //int outputX = outputBitmap.Stride - (tileMaxX + xEndPadding), outputY = 0, currentRgbIndex, currentBitMapIndex;
+        int outputX = 0, outputY = 0, currentRgbIndex, currentBitMapIndex;
+
+        string path = Path.Combine(pathToResourceFolder, GetFolderPathOfMech());
+        string pathBytes = Path.Combine(path, currentPartIndex.ToString() + "_" + count + spriteBMPFileExt); // we will store this for the save
+        Debug.Log("printing " + bitmaps.Count + " sprites");
+        //int outputX = 0, outputY = outputBitmap.Height - (tileMaxX + xEndPadding), currentRgbIndex, currentBitMapIndex;
+        
+        for (int i = startIndex; i < bitmaps.Count; i++)
+        //for (int i = startIndex; i < 120; i++)
+        {
+            //Debug.Log("copying at " + outputX + " x " + outputY);
+            //if (outputY - (tileMaxY + yEndPadding) < 0) break;
+            if (outputY + tileMaxY + yEndPadding >= outputBitmap.Height)
+            {
+                Debug.Log("Max output Y fixed " + outputY);
+                outputBitmap.Data = rgbValues;
+                outputBitmap.Serialize(pathBytes);
+                Debug.Log("reached end of tile sheet with " + (bitmaps.Count - i - 1) + " remaining");
+                CacheFixedSpacingMCBitmap(i + 1, count + 1); // if were not at the end but the sheet is filled, print on next sheet
+                return;
+            }
+
+            for (int x = 0; x < bitmaps[i].Width; x++)
+            {
+                for (int y = 0; y < bitmaps[i].Height; y++)
+                {
+                    currentRgbIndex = (outputY + y) * outputBitmap.Stride + outputX + x;
+                    currentBitMapIndex = (y * bitmaps[i].Stride) + x;
+
+                    rgbValues[currentRgbIndex] = bitmaps[i].Data[currentBitMapIndex];
+                }
+
+            }
+
+            //if (i == 200) break;//testing
+            outputX += tileMaxX + xEndPadding;// instead we can just pass in the width of the current?
+            //if (outputX < 0)
+            if (outputX + tileMaxX + xEndPadding >= outputBitmap.Stride)
+            {
+                //outputX = outputBitmap.Stride - (tileMaxX + xEndPadding);
+                outputX = 0;
+                //outputY -= tileMaxY + yEndPadding;
+                outputY += tileMaxY + yEndPadding; // instead we just pass in the max height of the line?
+            }
+
+
+        }
+
+        Debug.Log("Max output Y fixed " + outputY + " finished loop of " + bitmaps.Count);
+        outputBitmap.Data = rgbValues;
+
+        // save here if we reach end
+        outputBitmap.Serialize(pathBytes);
     }
 
     // the final version of this must be a function that returns both a Texture2D[], an PartAnimationState[], and a PartVertAndUVData[]
@@ -1321,16 +1429,19 @@ public class MechSpriteLoader_OLD : MonoBehaviour
             //if (GUILayout.Button("Create Mech Anim files")) editor.CreateMechAnimData();
             //if (GUILayout.Button("Create 1 Sheet For Parts")) editor.CreateContinuousPartSheet();
             //if (GUILayout.Button("Create Sheets For Parts")) editor.CreateAllPartsInFolders();
-            if (GUILayout.Button("Asses Sheets For Parts")) editor.AssesAllParts();
-            if (GUILayout.Button("Cache Data")) editor.CacheData();
-            if (GUILayout.Button("Asses Last Y Coord for Cached Part")) editor.AssesDataForLastPixelYCoord();
-            if (GUILayout.Button("Display YMax and SpaceLeft of Part")) editor.DisplayYSpaceLeftAndYMaxOfPart();
+            //if (GUILayout.Button("Asses Sheets For Parts")) editor.AssesAllParts();
+            if (GUILayout.Button("Cache ALL Data")) editor.CacheData();
+            if (GUILayout.Button("Cache Data for Mech")) editor.CacheDataForMech();
+            //if (GUILayout.Button("Asses Last Y Coord for Cached Part")) editor.AssesDataForLastPixelYCoord();
             if (GUILayout.Button("Print all Cached Parts")) editor.PrintAllTexturesFromCache();
             if (GUILayout.Button("Print Cached Mech")) editor.PrintTextureFromCurrentMechCache();
+            
             if (GUILayout.Button("Create Arms Atlas of Mech")) editor.AppendArmsOfCurrentMech();
             if (GUILayout.Button("Create LegsTorso Atlas of Mech")) editor.AppendTorsoToLegsOfCurrentMech();
             if (GUILayout.Button("Append Part to Atlas of Mech")) editor.AppendToLastAtlasCreated();
             if (GUILayout.Button("Print Atlas of Mech")) editor.PrintCurrentMechAtlas();
+            
+            if (GUILayout.Button("Display YMax and SpaceLeft of Part")) editor.DisplayYSpaceLeftAndYMaxOfPart();
             //if (GUILayout.Button("Print Mech BMP")) editor.PrintBitmaps();
             //if (GUILayout.Button("Prep All Sheets")) ModifyTextures();
 
