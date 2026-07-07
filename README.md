@@ -36,5 +36,6 @@ Press play and the game will load (slowly) whatever mech you put into the MechSa
 <img width="712" height="232" alt="image" src="https://github.com/user-attachments/assets/e831b844-eb74-404c-9d88-408925a12968" />
 
 Press the arrow keys to make the mech move! Behold its buggy glory! 
-<img width="1395" height="684" alt="image" src="https://github.com/user-attachments/assets/07abee6a-e0fb-4441-a922-fdfcdacd6e24" />
+<img width="1383" height="740" alt="image" src="https://github.com/user-attachments/assets/679e4d5e-d998-4e33-b39d-cca88951640c" />
+
 
