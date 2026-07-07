@@ -21,3 +21,20 @@ Challenges
 Known Issues:
 1. The map overlay tiles are misplaced. The positioning is not yet figured out.
 2. The Mech animations will have problems when mirroring (among other things like wrong animation transitions etc)
+3. Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!
+
+Quick Tutorial:
+First we load the game files using the GameFilesLoader mono:
+<img width="731" height="596" alt="image" src="https://github.com/user-attachments/assets/8baf4bcf-5904-4f40-982e-a3ae70dd21e0" />
+Pressing Copy MCG Files needs to be done so we can work with a local copy of the game files
+
+
+The Map Loader mono will be able to load maps (with errors in overlay tiles!). 
+<img width="1908" height="765" alt="image" src="https://github.com/user-attachments/assets/3bd33153-e7fc-4c1d-9b9c-78d36853a205" />
+
+
+Press play and the game will load (slowly) whatever mech you put into the MechSample mono
+<img width="712" height="232" alt="image" src="https://github.com/user-attachments/assets/e831b844-eb74-404c-9d88-408925a12968" />
+
+Press the arrow keys to make the mech move! Behold its buggy glory!
+<img width="1619" height="675" alt="image" src="https://github.com/user-attachments/assets/09468c07-7052-44dd-96bd-f252fe1d5a7f" />
