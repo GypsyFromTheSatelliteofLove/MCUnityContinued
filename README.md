@@ -25,6 +25,7 @@ Known Issues:
 3. Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!
 
 Quick Tutorial:
+
 Download the files in the repo as a zip and extract to an existing unity project.
 
 First we load the game files using the GameFilesLoader mono
