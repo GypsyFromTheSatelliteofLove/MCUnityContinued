@@ -1,6 +1,17 @@
+**MC UNITY CONTINUED**
+
 A continuation of IronArthur's MCUnity https://github.com/IronArthur/MCUnity
 
 This is an attempt to get Mech Commander working in Unity based on the masterful work of Iron Arthur! He basically wrote most of what was needed to get all the art assets from Mech Commander and that code still lies at the heart of this project.
+
+Quick Tutorial:
+
+1. Download the files in the repo as a zip or git clone it.
+2. Open the SpriteLoader scene
+3. Find the GameFilesLoader gameobject and locate your MCG installation folder (where the MCG.exe is)
+4. Press Copy Files to make a local copy of the asset files
+5. You can load maps with the map loader
+6. Press play and the mechsample can be moved with the arrow keys (in all its buggy buggy glory!)
 
 What we can do now?
 
@@ -25,8 +36,16 @@ Known Issues:
 2. The Mech animations will have problems when mirroring (among other things like wrong animation transitions etc)
 3. Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!
 
-Quick Tutorial:
+OLD STUFF:
+1. Open the scene: SpriteLoader_Old.scene
+2. Make sure that the game files were copied into the local folder (if you already did so, no need to do again)
+3. To create traditional sprite sheets, locate the MechSpriteLoader_OLD mono, press Cache Data for Mech button
+4. Press Print Cached Mech - this will create sprite sheets in the Resources/Sprites/Mechs/<mechname> folder (in their own part folder)
+5. Navigate to the sprite sheet, make sure to set to 4096 max size, alpha 8 format, and point no filter 
+6. then click the sprite editor and just auto slice with the pivot at TOP LEFT... do this for all the sprite sheets (THESE WILL TAKE A LOT OF TIME: up to 10 min for each sheet?)
+7. Locate the MechSample gameobject and click the Load Resources button on the MechAnimator_OLD mono
+8. Press play and watch the jank filled monstrosity fill your eyeballs
 
-Download the files in the repo as a zip and extract to an existing unity project.
-
-First we load the game files using the GameFilesLoader mono Pressing Copy MCG Files needs to be done so we can work with a local copy of the game files:
+SOME INFO:
+1. The main thing the game could do to load the assets is to use a custom texture + indexing system which works fine but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)
+2. IF the loading problem can be solved (which might be because the indexing uses big arrays of vector2s), its probably better to generate meshes instead of sprite sheets?
