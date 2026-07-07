@@ -17,7 +17,7 @@ What we can do now?
 
 1. Load all assets from the game into Unity
 2. Map terrain can be read from their respective FST and FIT files and terrain can be loaded as they appear in the game
-3. Mechs and Vehicles can be loaded into Unity at least to view
+3. Mechs can be loaded into Unity at least to view (theoretically possible for vehicles as well but the script isnt written yet)
 4. A buggy animation system for mechs is in place (press play and use keyboard) but it is far from finished
 
 What we hope to get done
@@ -47,5 +47,6 @@ OLD STUFF:
 8. Press play and watch the jank filled monstrosity fill your eyeballs
 
 SOME INFO:
-1. The main thing the game could do to load the assets is to use a custom texture + indexing system which works fine but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)
+1. The main thing the game could do to load the assets is to use a custom texture + indexing system which works (kind of) but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)
 2. IF the loading problem can be solved (which might be because the indexing uses big arrays of vector2s), its probably better to generate meshes instead of sprite sheets?
+3. The current version is still basically more OOP but a DOD approach should be possible... but the structs have to be streamlined for better memory effeciency
