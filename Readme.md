@@ -44,7 +44,7 @@ Known Issues:
 
 1. The map overlay tiles are misplaced. The positioning is not yet figured out.
 2. The Mech animations will have problems when mirroring (among other things like wrong animation transitions etc) 
-3. Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!
+3. ~~Loading Mech Assets take too long! It is faster if we extract the sprite sheets as png files first, but the project starts to balloon in size!~~ solved
 
 OLD STUFF:
 1. Open the scene: SpriteLoader_Old.scene
