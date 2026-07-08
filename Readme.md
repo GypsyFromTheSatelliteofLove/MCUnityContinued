@@ -54,9 +54,8 @@ OLD STUFF:
 6. then click the sprite editor and just auto slice with the pivot at TOP LEFT... do this for all the sprite sheets (THESE WILL TAKE A LOT OF TIME: up to 10 min for each sheet?)
 7. Locate the MechSample gameobject and click the Load Resources button on the MechAnimator_OLD mono
 8. Press play and watch the jank filled monstrosity fill your eyeballs
-   
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/34018acc-9694-487c-b634-4540d891973f" />
 
+<img width="1608" height="834" alt="image" src="https://github.com/user-attachments/assets/1044d347-2f58-4a20-a7bd-0b1a0e1a0ee5" />
 
 SOME INFO:
 1. ~~The main thing the game could do to load the assets is to use a custom texture + indexing system which works (kind of) but is slow to load, and the sprite sheets that take a ton of setup but usually load quicker (dunno about runtime memory effeciency tho)~~ Loading times have been solved for indexed textures - instantiating file manager was the issue
