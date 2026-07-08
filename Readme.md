@@ -10,8 +10,7 @@ Quick Tutorial:
 2. Open the SpriteLoader scene
 3. Find the GameFilesLoader gameobject and locate your MCG installation folder (where the MCG.exe is)
 
-<img width="662" height="649" alt="image" src="https://github.com/user-attachments/assets/d36622cd-b389-4905-8c12-e2a704a9b781" />
-
+<img width="674" height="618" alt="image" src="https://github.com/user-attachments/assets/97d83210-c15a-42db-b4f8-10e4b1a7441d" />
    
 5. Press Copy Files to make a local copy of the asset files
 6. You can load maps with the map loader
