@@ -41,18 +41,12 @@ public class MechSpriteLoader : MonoBehaviour
     private const float pixelsPerUnit = 1f / 100f;
     private const int shpID = 0x30312E31; // checks if the pak file is an shp
 
-    private System.Diagnostics.Stopwatch sw;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     // loader that goes thru all the mech parts in the pak files and just gets a MCbitmap list
     // IN FUTURE we can cache once we get the bitmaps and arrange them in an atlas (a basic atlas without any packing)
     // how to split up atlas? at the start do we just make one per part?? - might be best for now tho it will need optimizing eventually
@@ -60,8 +54,7 @@ public class MechSpriteLoader : MonoBehaviour
     
     // create another method to return mech animation data
     public MechAnimationData GetMechAnimationData(MechSHPIndexTable mechToGet)
-	{
-        SetupFileManager();
+    {
         mechIndex = mechToGet;
 
         currentPartIndex = PartIndex.LEGS;
@@ -73,14 +66,14 @@ public class MechSpriteLoader : MonoBehaviour
         currentPartIndex = PartIndex.R_ARMS;
         var tempR_arms = GetPartAnimationData(mechPakFiles[(int)currentPartIndex]);
 
+        var tempdata = new MechAnimationData(tempLegs, tempTorsos, tempL_arms, tempR_arms);
 
-        return new MechAnimationData(tempLegs, tempTorsos, tempL_arms, tempR_arms);
+        return tempdata;
 	}
 
     // return part animation data
     private PartAnimationData GetPartAnimationData(string partPath)
     {
-        sw = new System.Diagnostics.Stopwatch();
         string path = Path.Combine(pathToResourceFolder, GetFolderPathOfMech());
         string pathData = Path.Combine(path, currentPartIndex.ToString() + spriteDataFileExt);
         string pathVertsAndUV = Path.Combine(path, currentPartIndex.ToString() + vertsAndUVFileExt);
@@ -99,22 +92,15 @@ public class MechSpriteLoader : MonoBehaviour
             string jsonString = File.ReadAllText(pathData);
             if (!string.IsNullOrEmpty(jsonString))
 			{
-                sw.Start();
                 SpriteAnimationStatesSaveData cachedData = JsonUtility.FromJson<SpriteAnimationStatesSaveData>(jsonString);
-                sw.Stop();
-                Debug.Log("time to finish json read " + sw.ElapsedMilliseconds);
-                sw.Reset();
-
-                sw.Start();
                 PartVertAndUVData[] cachedVertsAndUvs = DeserializeVertsAndUV(pathVertsAndUV);
-                sw.Stop();
-                Debug.Log("time to finish verts deserialize " + sw.ElapsedMilliseconds);
-                sw.Reset();
-
+                
                 return ConvertSpriteInfoArrayToPartAnimation(cachedData, cachedVertsAndUvs);
             }
 
         }
+        // only setup a file manager if it is absolutely necessary! it takes up to 21 secs or more to load one
+        SetupFileManager();
 
         // if no cached, retrieve data from the pak files (SLOW)
         Debug.Log("no cache found, loading from pak");
@@ -246,10 +232,10 @@ public class MechSpriteLoader : MonoBehaviour
 		for (int i = 0; i < spriteInfos.Count; i++)
 		{
             var tempVertAndUV = new PartVertAndUVData();
-            tempVertAndUV.vert_0 = spriteInfos[i].verts[0];
-            tempVertAndUV.vert_1 = spriteInfos[i].verts[1];
-            tempVertAndUV.vert_2 = spriteInfos[i].verts[2];
-            tempVertAndUV.vert_3 = spriteInfos[i].verts[3];
+            tempVertAndUV.topLeftVert = spriteInfos[i].verts[0];
+            tempVertAndUV.bottomRightVert = spriteInfos[i].verts[3];
+            //tempVertAndUV.vert_2 = spriteInfos[i].verts[2];
+            //tempVertAndUV.vert_3 = spriteInfos[i].verts[3];
 
             tempVertAndUV.uv_0 = spriteInfos[i].uvs[0];
             tempVertAndUV.uv_1 = spriteInfos[i].uvs[1];
@@ -323,7 +309,6 @@ public class MechSpriteLoader : MonoBehaviour
 
     public PartAnimationData ConvertSpriteInfoArrayToPartAnimation(SpriteAnimationStatesSaveData saveData, PartVertAndUVData[] vertsAndUvs)
 	{
-        sw.Start();
         var tempStateDatas = new PartAnimationStateData[saveData.animationStates.Length];
     
 		for (int i = 0; i < tempStateDatas.Length; i++)
@@ -340,33 +325,14 @@ public class MechSpriteLoader : MonoBehaviour
             tempSingleDatas[i] = new PartAnimationStateData((ushort)saveAnimState.startIndex,
                 (byte)saveAnimState.numOfImages, (byte)saveAnimState.numOfFaces, (byte)saveAnimState.offset, (sbyte)saveAnimState.playspeed);
         }
-        sw.Stop();
-        Debug.Log("time to finish updating states " + sw.ElapsedMilliseconds);
-        sw.Reset();
 
-        sw.Start();
         var tempTextures = new Texture2D[saveData.pathsToMCBitmap.Length];
 
 		for (int i = 0; i < tempTextures.Length; i++)
 		{
             var bitmap = MCBitmap.Unserialize(saveData.pathsToMCBitmap[i]);
-            tempTextures[i] = ImageProcessing.MakeIndexedTexture2D(bitmap); // this might be slowing us down
+            tempTextures[i] = ImageProcessing.MakeIndexedTexture2D(bitmap); 
 		}
-
-        sw.Stop();
-        Debug.Log("time to finish texture conversion " + sw.ElapsedMilliseconds);
-        sw.Reset();
-
-        // TOO BIG TO ITERATE
-        /*
-        var tempVertsAndUVS = new PartVertAndUVData[saveData.spriteInfos.Length];
-		
-        for (int i = 0; i < tempVertsAndUVS.Length; i++)
-		{
-            var saveSpriteInfo = saveData.spriteInfos[i];
-            tempVertsAndUVS[i] = new PartVertAndUVData(saveSpriteInfo.verts, saveSpriteInfo.uvs, saveSpriteInfo.sheetIndex); // z is not yet implemented
-
-		}*/
 
         return new PartAnimationData(tempStateDatas, tempSingleDatas, tempTextures, vertsAndUvs);
     }
@@ -490,17 +456,17 @@ public class MechSpriteLoader : MonoBehaviour
             writer.Write(len); // write the length as int
 			for (int i = 0; i < len; i++)
 			{
-                writer.Write(vertsAndUvs[i].vert_0.x);
-                writer.Write(vertsAndUvs[i].vert_0.y);
+                writer.Write(vertsAndUvs[i].topLeftVert.x);
+                writer.Write(vertsAndUvs[i].topLeftVert.y);
 
-                writer.Write(vertsAndUvs[i].vert_1.x);
-                writer.Write(vertsAndUvs[i].vert_1.y);
+                writer.Write(vertsAndUvs[i].bottomRightVert.x);
+                writer.Write(vertsAndUvs[i].bottomRightVert.y);
 
-                writer.Write(vertsAndUvs[i].vert_2.x);
-                writer.Write(vertsAndUvs[i].vert_2.y);
+                //writer.Write(vertsAndUvs[i].vert_2.x);
+                //writer.Write(vertsAndUvs[i].vert_2.y);
                 
-                writer.Write(vertsAndUvs[i].vert_3.x);
-                writer.Write(vertsAndUvs[i].vert_3.y);
+                //writer.Write(vertsAndUvs[i].vert_3.x);
+                //writer.Write(vertsAndUvs[i].vert_3.y);
 
                 writer.Write(vertsAndUvs[i].uv_0.x);
                 writer.Write(vertsAndUvs[i].uv_0.y);
@@ -532,10 +498,10 @@ public class MechSpriteLoader : MonoBehaviour
 			for (int i = 0; i < len; i++)
 			{
                 var vertAndUV = new PartVertAndUVData();
-                vertAndUV.vert_0 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
-                vertAndUV.vert_1 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
-                vertAndUV.vert_2 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
-                vertAndUV.vert_3 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
+                vertAndUV.topLeftVert = new Vector2(reader.ReadSingle(), reader.ReadSingle());
+                vertAndUV.bottomRightVert = new Vector2(reader.ReadSingle(), reader.ReadSingle());
+                //vertAndUV.vert_2 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
+                //vertAndUV.vert_3 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
                 
                 vertAndUV.uv_0 = new Vector2(reader.ReadSingle(), reader.ReadSingle());
                 vertAndUV.uv_1 = new Vector2(reader.ReadSingle(), reader.ReadSingle());

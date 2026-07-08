@@ -118,6 +118,7 @@ public class MapLoader : MonoBehaviour
 
     public void LoadMap(string mapName)
 	{
+        // THIS WILL TAKE UP TO 20 seconds to load... it is very slow! but it is needed for the rest of the operations
         SetupFileManager();
 
         var missionFileName = Path.ChangeExtension(mapName, "fit");

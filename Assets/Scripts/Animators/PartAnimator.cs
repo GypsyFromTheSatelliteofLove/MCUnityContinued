@@ -43,9 +43,7 @@ public class PartAnimator : MonoBehaviour
     [SerializeField]
     private int offset;
 
-    public bool useTestOffset;
-    public int testOffset;
-
+    
     public int CurrentFacingCount
 	{
 		get { return numOfFaces; }
@@ -148,19 +146,10 @@ public class PartAnimator : MonoBehaviour
 
     public void UpdateFrames(int frameIndex)
     {
-        currentIndex = (frameIndex + (useTestOffset ? testOffset : offset)) % numOfFrames;
+        currentIndex = (frameIndex + offset) % numOfFrames;
         
         UpdateAnimatorInternal();
     }
-	/*
-    public void ChangeCurrentAnimation(AnimationData newAnimData)
-	{
-        currentAnimationData = newAnimData;
-        numOfFrames = currentAnimationData.NumOfImages;
-        numOfFaces = currentAnimationData.NumOfFaces;
-        halfOfFrames = numOfFrames / 2;
-        Debug.Log("playing " + numOfFrames + " frames");
-	}*/
     
     public void ChangeCurrentAnimation(PartAnimationStateData newAnimData)
 	{
@@ -206,25 +195,6 @@ public class PartAnimator : MonoBehaviour
 	{
         currentIndex = 0;
         UpdateAnimator();
-        /*
-        currentStart = currentAnimationData.IndexOfStart + ((byte)facing * numOfFrames);
-        if (numOfFaces == 32 && (int)facing > 16)
-        {
-            Debug.Log("32 frames offset set");
-            offset = halfOfFrames;
-        }
-        else offset = 0;
-        
-        Debug.Log("startin anim at " + currentStart + " offset " + offset + " current ind " + currentIndex);
-        
-        // if the frame count is 1, we update the sprite immediatetly
-        if (numOfFrames > 1) return;
-        position.x = positionData.partPositions[currentStart].x / pixelsPerUnit * mirrorValue;
-        position.y = -positionData.partPositions[currentStart].y / pixelsPerUnit;
-        tr.localPosition = position;
-
-        spriteRenderer.sprite = sprites[currentStart];
-        */
     }
 
     public void UpdateAnimator()
@@ -243,17 +213,11 @@ public class PartAnimator : MonoBehaviour
 
         // on single farmes we just assign the position and uvs to the mesh
         var currentVertsAndUvs = partAnimationData.vertsAndUVs[currentStart + currentIndex];
-        float left = currentVertsAndUvs.vert_0.x;
-        float right = currentVertsAndUvs.vert_1.x;
-        /*if (mirrorValue < 0)
-        {
-            left = currentVertsAndUvs.vert_1.x;
-            right = currentVertsAndUvs.vert_0.x;
-        }*/
-        verts[0].Set(left, currentVertsAndUvs.vert_0.y, zDepth);
-        verts[1].Set(right, currentVertsAndUvs.vert_1.y, zDepth);
-        verts[2].Set(left, currentVertsAndUvs.vert_2.y, zDepth);
-        verts[3].Set(right, currentVertsAndUvs.vert_3.y, zDepth);
+       
+        verts[0].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[1].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[2].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
+        verts[3].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
         //Debug.Log("vrts 0: " + verts[0] + "; 1: " + verts[1] + "; 2: " + verts[2] + "; 3: " + verts[3]);
 
         uvs[0] = currentVertsAndUvs.uv_0;
@@ -270,39 +234,25 @@ public class PartAnimator : MonoBehaviour
             scale.x = mirrorValue;
             tr.localScale = scale;
         }        
-        
-        //if (mirrorValue < 1) offset = halfOfFrames;
-        //else offset = 0;
-        /*
-        position.x = positionData.partPositions[currentStart + currentIndex].x * pixelsPerUnit * mirrorValue;
-        position.y = -positionData.partPositions[currentStart + currentIndex].y * pixelsPerUnit;
-        tr.localPosition = position;
-
-        spriteRenderer.sprite = sprites[currentStart + currentIndex];
-
-        //spriteRenderer.flipX = mirrorValue == -1;
-        
-        spriteRenderer.transform.localScale = scale;
-        */
     }
 
     private void UpdateAnimatorInternal()
     {
         var currentVertsAndUvs = partAnimationData.vertsAndUVs[currentStart + currentIndex];
 
-        float left = currentVertsAndUvs.vert_0.x;
-        float right = currentVertsAndUvs.vert_1.x;
-        /*if (mirrorValue < 0)
+        /*float left = currentVertsAndUvs.topLeftVert.x;
+        float right = currentVertsAndUvs.bottomRightVert.x;
+        if (mirrorValue < 0)
 		{
             left = currentVertsAndUvs.vert_1.x;
             right = currentVertsAndUvs.vert_0.x;
 		}*/
-        verts[0].Set(left, currentVertsAndUvs.vert_0.y, zDepth);
-        verts[1].Set(right, currentVertsAndUvs.vert_1.y, zDepth);
-        verts[2].Set(left, currentVertsAndUvs.vert_2.y, zDepth);
-        verts[3].Set(right, currentVertsAndUvs.vert_3.y, zDepth);
+        verts[0].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[1].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[2].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
+        verts[3].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
         //Debug.Log("vrts 0: " + verts[0] + "; 1: " + verts[1] + "; 2: " + verts[2] + "; 3: " + verts[3]);
-        
+
         uvs[0] = currentVertsAndUvs.uv_0;
         uvs[1] = currentVertsAndUvs.uv_1;
         uvs[2] = currentVertsAndUvs.uv_2;
@@ -318,23 +268,7 @@ public class PartAnimator : MonoBehaviour
             scale.x = mirrorValue;
             tr.localScale = scale;
         }
-        //if (mirrorValue < 1) offset = halfOfFrames;
-        //else offset = 0;
-
-        // IF a change in texture is required this is where we shouild check (if the previous textureIDx is same as the current?)
-        /*
-        // these must be mesh filter assignments 
-        position.x = positionData.partPositions[currentStart + currentIndex].x * pixelsPerUnit * mirrorValue;
-        position.y = -positionData.partPositions[currentStart + currentIndex].y * pixelsPerUnit;
-        tr.localPosition = position;
-        //spriteRenderer.flipX = mirrorValue == -1;
-        // retian these
-        scale.x = mirrorValue; 
-        spriteRenderer.transform.localScale = scale;
-
-        // these must be uv updates into meshfilter
-        spriteRenderer.sprite = sprites[currentStart + currentIndex];
-        */
+       
     }
 
     public void UpdateFacingRounded(int newFacing)
@@ -380,17 +314,17 @@ public class PartAnimator : MonoBehaviour
         // this IS NOT effecient - temporary
         var currentVertsAndUvs = partAnimationData.vertsAndUVs[currentStart + currentIndex];
 
-        float left = currentVertsAndUvs.vert_0.x;
-        float right = currentVertsAndUvs.vert_1.x;
+        float left = currentVertsAndUvs.topLeftVert.x;
+        float right = currentVertsAndUvs.bottomRightVert.x;
         /*if (mirrorValue < 0)
         {
             left = currentVertsAndUvs.vert_1.x;
             right = currentVertsAndUvs.vert_0.x;
         }*/
-        verts[0].Set(left, currentVertsAndUvs.vert_0.y, zDepth);
-        verts[1].Set(right, currentVertsAndUvs.vert_1.y, zDepth);
-        verts[2].Set(left, currentVertsAndUvs.vert_2.y, zDepth);
-        verts[3].Set(right, currentVertsAndUvs.vert_3.y, zDepth);
+        verts[0].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[1].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[2].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
+        verts[3].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
         //Debug.Log("vrts 0: " + verts[0] + "; 1: " + verts[1] + "; 2: " + verts[2] + "; 3: " + verts[3]);
         mesh.vertices = verts;
         //tr.localPosition = position;
@@ -403,10 +337,10 @@ public class PartAnimator : MonoBehaviour
         var idx = 10;
 
         var currentVertsAndUvs = data.vertsAndUVs[idx];
-        verts[0].Set(currentVertsAndUvs.vert_0.x, currentVertsAndUvs.vert_0.y, zDepth);
-        verts[1].Set(currentVertsAndUvs.vert_1.x, currentVertsAndUvs.vert_1.y, zDepth);
-        verts[2].Set(currentVertsAndUvs.vert_2.x, currentVertsAndUvs.vert_2.y, zDepth);
-        verts[3].Set(currentVertsAndUvs.vert_3.x, currentVertsAndUvs.vert_3.y, zDepth);
+        verts[0].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[1].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.topLeftVert.y, zDepth);
+        verts[2].Set(currentVertsAndUvs.topLeftVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
+        verts[3].Set(currentVertsAndUvs.bottomRightVert.x, currentVertsAndUvs.bottomRightVert.y, zDepth);
         //Debug.Log("vrts 0: " + verts[0] + "; 1: " + verts[1] + "; 2: " + verts[2] + "; 3: " + verts[3]);
         mesh.vertices = verts;
         
@@ -417,20 +351,5 @@ public class PartAnimator : MonoBehaviour
         Debug.Log("uvs 0: " + uvs[0] + "; 1: " + uvs[1] + "; 2: " + uvs[2] + "; 3: " + uvs[3]);
         mesh.uv = uvs;
     }
-    /*
-    public void LoadPositionData(PartPositionsData p_positionData)
-	{
-        positionData = p_positionData;
-	}
-
-    public void LoadSprites(Sprite[] p_sprites)
-	{
-        sprites = p_sprites;
-	}
-
-    public void ChangeSprite(Sprite newSprite)
-	{
-        spriteRenderer.sprite = newSprite;
-	}*/
 
 }

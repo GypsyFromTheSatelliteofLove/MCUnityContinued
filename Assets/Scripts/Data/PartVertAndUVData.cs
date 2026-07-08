@@ -9,10 +9,10 @@ public struct PartVertAndUVData
 {
 	// i think it would be better to just have the vectors in the struct... that way its safer to predict what layout it will use?
 	// we have to remember that arrays are reference types so they might not be laid out in memory like we assume they would be
-	public Vector2 vert_0; //8
-	public Vector2 vert_1; //8
-	public Vector2 vert_2; //8 // WE COULD TECHNICALLY ONLY STORE 2 CORNERS - LATER
-	public Vector2 vert_3; //8 = 32 bytes total
+	public Vector2 topLeftVert; //8
+	public Vector2 bottomRightVert; //8
+	//public Vector2 vert_2; //8 // WE COULD TECHNICALLY ONLY STORE 2 CORNERS - LATER
+	//public Vector2 vert_3; //8 = 32 bytes total
 	public Vector2 uv_0; //8
 	public Vector2 uv_1; //8
 	public Vector2 uv_2; //8
@@ -25,10 +25,10 @@ public struct PartVertAndUVData
 	// we do this instead of Vector2[] so we can save all these contigous in memory instead of an array ref which is a pointer
 	public PartVertAndUVData(Vector3[] verts, Vector2[] uvs, int textureIdx = 0, int zVert = 0)
 	{
-		vert_0 = verts[0];
-		vert_1 = verts[1];
-		vert_2 = verts[2];
-		vert_3 = verts[3];
+		topLeftVert = verts[0];
+		bottomRightVert = verts[1];
+		//vert_2 = verts[2];
+		//vert_3 = verts[3];
 
 		uv_0 = uvs[0];
 		uv_1 = uvs[1];

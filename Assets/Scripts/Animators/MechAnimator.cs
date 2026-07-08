@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.IO;
 using System.Collections.Generic;
 
 /// <summary>
@@ -116,37 +115,7 @@ public class MechAnimator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // REPLACE ALL WITH A CALL TO THE MECHSPRITE LOADER THAT WILL RETURN 3 SETS OF DATA FOR EACH PART:
-        // Texture2D[] texture - all the sprites for a part
-        // PartAnimationState[] animationStates - all animation states for a part (WILL HAVE ERRORS as deciphering the animations are incomplete
-        // PartVertAndUVData[] vertAndUVData - all sprite uv coords and verts for positions and size to display animations
-
         animationData = loader.GetMechAnimationData(mechID);
-
-        // CONVERT THE NEED FOR POSITION DATA TO VERTANDUVDATALoc = Path.Combine(legsAnimDataFileLoc, (int)mechName + "_" + mechName + "/" + mechName + "_" + "LEGS" + "_AnimData.Json");
-        /*string jsonString = File.ReadAllText(legsAnimDataFileLoc);
-        var animDataDB = JsonUtility.FromJson<PartAnimationDBSet>(jsonString);
-        legsAnimData = new PartAnimationData_OLD(animDataDB);
-        legsAnimator.LoadPositionData(new PartPositionsData(animDataDB)); 
-
-        torsosAnimDataFileLoc = Path.Combine(torsosAnimDataFileLoc, (int)mechID + "_" + mechID + "/" + mechID + "_" + "TORSOS" + "_AnimData.Json");
-        jsonString = File.ReadAllText(torsosAnimDataFileLoc);
-        animDataDB = JsonUtility.FromJson<PartAnimationDBSet>(jsonString);
-        torsoAnimData = new PartAnimationData_OLD(animDataDB);
-        torsoAnimator.LoadPositionData(new PartPositionsData(animDataDB));
-
-        l_armsAnimDataFileLoc = Path.Combine(l_armsAnimDataFileLoc, (int)mechID + "_" + mechID + "/" + mechID + "_" + "L_ARMS" + "_AnimData.Json");
-        jsonString = File.ReadAllText(l_armsAnimDataFileLoc);
-        animDataDB = JsonUtility.FromJson<PartAnimationDBSet>(jsonString);
-        l_armAnimData = new PartAnimationData_OLD(animDataDB);
-        l_armAnimator.LoadPositionData(new PartPositionsData(animDataDB));
-
-        r_armsAnimDataFileLoc = Path.Combine(r_armsAnimDataFileLoc, (int)mechID + "_" + mechID + "/" + mechID + "_" + "R_ARMS" + "_AnimData.Json");
-        jsonString = File.ReadAllText(r_armsAnimDataFileLoc);
-        animDataDB = JsonUtility.FromJson<PartAnimationDBSet>(jsonString);
-        r_armAnimData = new PartAnimationData_OLD(animDataDB);
-        r_armAnimator.LoadPositionData(new PartPositionsData(animDataDB));
-        */
 
         legsAnimator.AssignPartAnimationData(animationData.legsAnimationData);
         torsoAnimator.AssignPartAnimationData(animationData.torsoAnimationData);
@@ -492,16 +461,9 @@ public class MechAnimator : MonoBehaviour
         numOfFrames = legsAnimator.CurrentFrameCount;
     }
 
+    // converted to just test the loader
     public void LoadResources()
 	{
-        //l_armSprites = GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + mechName + "/LARMS");
-        //r_armSprites = GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + mechName + "/RARMS");
-        /*
-        legsAnimator.LoadSprites(GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + (int)mechID + "_" + mechID + "/LEGS"));
-        torsoAnimator.LoadSprites(GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + (int)mechID + "_" + mechID + "/TORSOS"));
-        l_armAnimator.LoadSprites(GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + (int)mechID + "_" + mechID + "/L_ARMS"));
-        r_armAnimator.LoadSprites(GetSpritesInFolder(dirOfMechsInResourceFolder + "/" + (int)mechID + "_" + mechID + "/R_ARMS"));
-        */
         if (loader == null)
 		{
             Debug.Log("no loader!");
